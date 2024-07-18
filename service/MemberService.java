@@ -15,7 +15,7 @@ public class MemberService {
 																														// 부메뉴
 																														// 반복
 																														// 처리
-		System.out.println("회원관리영 서비스로 진입");
+		System.out.println("-----------회원관리영 서비스--------");
 		boolean memberRun = true;
 
 		while (memberRun) {
@@ -72,26 +72,60 @@ public class MemberService {
 		MemberDAO memberDAO = new MemberDAO();
 		memberDAO.login(connection, loginMemberDTO);
 		return memberDAO.login(connection, loginMemberDTO);
-		// db에서 넘어온 객첼를 리턴한다.
+		// db에서 넘어온 객체를 리턴한다.
 	} // 로그인 메서드 종료
 
 	public void modify(Scanner scanner, Connection connection) { // 회원정보 수정 종료 메서드
 		System.out.println("회원정보 수정 메서드로 진입");
-		System.out.print("id : ");
-		String mdId = scanner.next();
-		System.out.print("pw : ");
+		MemberDTO modifyDTO = new MemberDTO();
+		modifyDTO = search(scanner, connection);
+		System.out.println("------수정할 pw-------");
+		System.out.println("pw :");
 		String mdPw = scanner.next();
-		MemberDTO modifyDTO = new MemberDTO(mdId,mdPw);
-		// 키보드로 입력받은 객체 생성
+		modifyDTO.setMpw(mdPw);
+		// 키보드로 입력받은 객체 생성		
 		MemberDAO memberDAO = new MemberDAO();
+		memberDAO.update(connection, modifyDTO);
 		
 	} // 정보수정 종료
 
 	public void delete(Scanner scanner, Connection connection) { // 회원탈퇴 메서드
 		System.out.println("회원탈퇴 메서드로 진입");
-		System.out.print("id : ");
-		String delId = scanner.next();
-		System.out.print("pw : ");
-		String delPw = scanner.next();
+		MemberDTO deleteDTO = new MemberDTO();
+		deleteDTO = search(scanner, connection);
+		System.out.println("정말 탈퇴를 진행하시겠습니까?");
+		System.out.println("1.예 | 2.아니요");
+		int deleteS = scanner.nextInt();
+		switch(deleteS) {
+		case 1:
+			System.out.println("탈퇴를 진행하겠습니다.\npw를 입력해주세요.");
+			System.out.println("pw : ");
+			String deletepW = scanner.next();
+			deleteDTO.setMpw(deletepW);	
+			MemberDAO deleteDAO = new MemberDAO();
+			// 아이디 확인 메시지 3번 나옴 추후 수정
+			deleteDAO.delete(connection, deleteDTO);
+			break;
+		case 2:
+			System.out.println(deleteDTO.getMid() + "다시 한번 환영합니다.");
+			break;
+		default:
+			System.out.println(">>> 입력 오류 <<<");
+		}// switch문 종료
+		
 	} // 회원탈퇴 메서드 종료
+	
+	
+	public MemberDTO search(Scanner scanner,Connection connection ) { // 아이디 중복검사 메서드
+		System.out.println("---------id,pw-------");
+		System.out.print("id : ");
+		String searchId = scanner.next();
+		System.out.print("pw : ");
+		String searchPw = scanner.next();
+		MemberDTO searchDTO = new MemberDTO(searchId,searchPw);
+		//키보드로 입력 받은 객체 생성
+		MemberDAO searchDAO = new MemberDAO();
+		searchDAO.searchId(connection, searchDTO);
+		return searchDTO;
+	}
 }

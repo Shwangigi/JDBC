@@ -20,7 +20,10 @@ public class MemberDTO {
 		this.mid = loginId;
 		this.mpw = loginPw;
 	} // 커스텀 생성자 -> id와 pw 처리용
-
+	
+	public MemberDTO (String mdpw) {
+		this.mid = mdpw;
+	}
 
 
 	// 메서드 -> 게터, 세터 (필드를 보호하기 위함)

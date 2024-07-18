@@ -52,7 +52,7 @@ public class BoardMain {
 		case 2:
 			System.out.println("게시판 페이지로 이동합니다.");
 			BoardService boardService = new BoardService();
-			boardService.list(connection);
+			boardService.boardMenu(scanner, connection);
 			break;
 		case 3:
 			System.out.println("대나무 숲을 종료합니다.");

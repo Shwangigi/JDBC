@@ -26,6 +26,17 @@ public class BoardDTO {
 		this.bdate = bdate;
 	}// insert,select 활용
 	
+	
+	public BoardDTO(String rgTitle, String rgContent, String rgWriter) {
+		this.btitle = rgWriter;
+		this.bcontent = rgContent;
+		this.bwriter = rgWriter;
+	}
+
+	public BoardDTO(String srWriter) {
+		this.bwriter = srWriter;
+	}
+
 	// 메서드
 	public int getBno() {
 		return bno;

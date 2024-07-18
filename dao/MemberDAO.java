@@ -98,11 +98,77 @@ public class MemberDAO {
 		return loginDTO; // 로그인 완성용 객체
 	} // 로그인 종료
 
-	public void update() { // 회원정보 수정
-
+	public void update(Connection connection, MemberDTO modifyDTO) { // 회원정보 수정
+		try {	
+			String updateSql ="update member set mpw=? where mid=? ";
+			PreparedStatement preparedStatement = connection.prepareStatement(updateSql);
+			preparedStatement.setString(1,modifyDTO.getMpw() );
+			preparedStatement.setString(2, modifyDTO.getMid());
+			
+			int result = preparedStatement.executeUpdate();
+					
+			if(result > 0) {
+				System.out.println("수정되었습니다.");
+			}else {
+				System.out.println("수정이 실패하였습니다.");
+			}
+			
+			preparedStatement.close();
+		} catch (SQLException e) {
+			System.out.println(">>> id & pw 오류 <<<");
+			e.printStackTrace();
+		}
+		
 	} // 회원정보 수정 종료
+	
 
-	public void delete() { // 회원정보 삭제
-
+	public void delete(Connection connection, MemberDTO deleteDTO) { // 회원정보 삭제
+		try {	
+			String updateSql ="delete from member where mpw=?";
+			PreparedStatement preparedStatement = connection.prepareStatement(updateSql);
+			
+			preparedStatement.setString(1,deleteDTO.getMpw() );
+			
+			
+			int result = preparedStatement.executeUpdate();
+					
+			if(result > 0) {
+				System.out.println("탈퇴되었습니다.");
+			}else {
+				System.out.println("탈퇴가  실패하였습니다.");
+			}
+			
+			preparedStatement.close();
+		} catch (SQLException e) {
+			System.out.println(">>> id & pw 오류 <<<");
+			e.printStackTrace();
+		}
+		
 	} // 회원정보 삭제 종료
+	
+	public void searchId(Connection connection,MemberDTO searchDTO) { // 아이디 중복
+		PreparedStatement preparedStatement = null;
+	    ResultSet resultSet = null;
+	    
+		try {
+			String ipCheck = "SELECT mid,mpw FROM member";
+			preparedStatement = connection.prepareStatement(ipCheck);
+			
+			resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				if (resultSet.getString("mid").equals(searchDTO.getMid())
+						&& resultSet.getString("mpw").equals(searchDTO.getMpw())) {
+					System.out.println(searchDTO.getMid()+"님 확인되셨습니다.");
+					
+				}
+			}
+			resultSet.close();
+			preparedStatement.close();
+		} catch (SQLException e) {
+			System.out.println("id&pw를 확인해주세요.");
+			e.printStackTrace();
+		}
+	}
+
 }
